@@ -34,10 +34,18 @@ function featureExtraction()
     % LBP 特征提取
     originalLBP = extractLBPFeatures(originalImg);
     targetLBP = extractLBPFeatures(targetImg);
+    % 将LBP特征转换为可视化图像（进行归一化处理）
+    originalLBPVisual = mat2gray(originalLBP);
+    targetLBPVisual = mat2gray(targetLBP);
 
     % HOG 特征提取
     originalHOG = extractHOGFeatures(single(originalImg));  % 转换为单精度浮点数
     targetHOG = extractHOGFeatures(single(targetImg));      % 转换为单精度浮点数
+    % 创建HOG特征维度信息对应的图像（实际可根据需求更好展示HOG特征）
+    [originalHOGrows, originalHOGcols] = size(originalHOG);
+    [targetHOGrows, targetHOGcols] = size(targetHOG);
+    originalHOGVisual = uint8(ones(originalHOGrows, originalHOGcols) * 128);
+    targetHOGVisual = uint8(ones(targetHOGrows, targetHOGcols) * 128);
 
     % 显示或进一步处理提取的特征
     disp('Original Image LBP Features:');
@@ -49,6 +57,36 @@ function featureExtraction()
     disp(originalHOG);
     disp('Target Image HOG Features:');
     disp(targetHOG);
+
+    % 显示LBP特征图
+    figure;
+    subplot(2, 2, 1);
+    imshow(originalImg);
+    title('原始图像');
+    subplot(2, 2, 2);
+    imshow(originalLBPVisual);
+    title('原始图像LBP特征图');
+    subplot(2, 2, 3);
+    imshow(targetImg);
+    title('提取的目标图像');
+    subplot(2, 2, 4);
+    imshow(targetLBPVisual);
+    title('目标图像LBP特征图');
+
+    % 显示HOG特征图（示意性展示）
+    figure;
+    subplot(2, 2, 1);
+    imshow(originalImg);
+    title('原始图像');
+    subplot(2, 2, 2);
+    imshow(originalHOGVisual);
+    title('原始图像HOG特征图（示意）');
+    subplot(2, 2, 3);
+    imshow(targetImg);
+    title('提取的目标图像');
+    subplot(2, 2, 4);
+    imshow(targetHOGVisual);
+    title('目标图像HOG特征图（示意）');
 end
 
 function lbpFeatures = extractLBPFeatures(image)
